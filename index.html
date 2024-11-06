@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CEP</title>
+    <style>
+        form {
+            margin: 20px 5px;
+        }
+        form label{
+            display:block;
+            font-size: 20px;
+            margin: 20px 0 5px 0;
+        }
+        .input_texto {
+            display: block;
+            padding: 10px 0px;
+            width: 50%;
+        }
+        .enviar{
+            width: 50%;
+            margin: 30px 0 0 0;
+            padding: 15px 0;
+            background: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: 1s all;
+        }
+
+        .enviar:hover{
+            background: darkorange;
+            transform: scale(1.1);
+        }
+
+    </style>
+    <script>
+        // 2ª ATIVIDADE AVALIATIVA (2,0 PONTOS)
+        // Criar um site que consome a API ViaCep,
+        // para preencher automaticamente o endereço.
+        function pesquisaCep(cep){
+            let validaCep = /^[0-9]{8}$/; // FALTA ESTA LINHA
+     
+            if(validaCep.test(cep)){ // E ESTE IF
+                var script = document.createElement('script');
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=preenche_cep';
+                document.body.appendChild(script);
+            } else { // E ESTE ELSE
+                erro.textContent = "CEP digitado incorretamente!";
+                document.getElementById("cep").value = "";
+            }
+        }
+
+        function preenche_cep(conteudo){
+            if("erro" in conteudo){
+                erro.textContent = "CEP não encontrado, digite um CEP válido!";
+                document.getElementById("cep").value = "";
+            } else {
+                document.getElementById("rua").value = conteudo.logradouro;
+                document.getElementById("bairro").value = conteudo.bairro;
+                document.getElementById("cidade").value = conteudo.localidade;
+                document.getElementById("uf").value = conteudo.uf;
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <form>
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" class ="input_texto" onblur="pesquisaCep(this.value)" required>
+
+            <p id="erro"></p>
+
+            <label for="rua">Rua:</label>
+            <input type="text" id="rua" class ="input_texto" required>
+
+            <label for="numero">Número:</label>
+            <input type="text" id="numero" class ="input_texto" required>
+
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" class ="input_texto" required>
+
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" class ="input_texto" required>
+
+            <label for="uf">Estado:</label>
+            <input type="text" id="uf" class ="input_texto" required>
+
+            <input type="submit" class="enviar" value="Enviar Formulário">
+        </form>
+    </main>
+    <footer>
+    </footer>
+</body>
+</html>
